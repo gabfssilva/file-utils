@@ -80,7 +80,7 @@ public class FileParser {
 					 * MAGIC
 					 */
 					String lineClassName = field.toGenericString()
-							.replaceAll("\\D*List<", "")
+							.replaceAll("\\D*<", "")
 							.replaceAll(">\\D*", "");
 					Class<L> lineType = (Class<L>) Class.forName(lineClassName);
 					List<L> lineList = new ArrayList<L>();

@@ -81,7 +81,11 @@ public class ModelSample {
 		this.seventhWord = seventhWord;
 	}
 
-	public static String getLineSample() {
-		return LINE_SAMPLE;
+	@Override
+	public String toString() {
+		return "ModelSample [firstWord=" + firstWord + ", secondWord="
+				+ secondWord + ", thirdWord=" + thirdWord + ", fourthWord="
+				+ fourthWord + ", fifthWord=" + fifthWord + ", sixthWord="
+				+ sixthWord + ", seventhWord=" + seventhWord + "]";
 	}
 }

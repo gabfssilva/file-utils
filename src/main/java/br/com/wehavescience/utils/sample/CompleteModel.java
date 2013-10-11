@@ -42,4 +42,10 @@ public class CompleteModel {
 	public void setLines(List<ModelSample> lines) {
 		this.lines = lines;
 	}
+
+	@Override
+	public String toString() {
+		return "CompleteModel [header=" + header + ", footer=" + footer
+				+ ", lines=" + lines + "]";
+	}
 }
