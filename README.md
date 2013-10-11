@@ -4,7 +4,6 @@ It is a tool that helps you to convert positional txt files to Object and Object
 
 
 
-[sourcecode language="java"]
 package br.com.wehavescience.utils.sample;
 
 import br.com.wehavescience.utils.file.annotations.Field;
@@ -96,4 +95,3 @@ public class ModelSample {
 				+ sixthWord + ", seventhWord=" + seventhWord + "]";
 	}
 }
-[/sourcecode]
