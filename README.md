@@ -1,4 +1,6 @@
-file-utils
-==========
+File Utils - THIS PROJECT DOES NOT HAVE A NAME YET, SO, I CALL IT FILE UTILS.
 
-file-utils
+It is a tool that helps you to convert positional txt files to Object and Object to positional files based on annotations:
+
+
+
