@@ -7,16 +7,15 @@ import br.com.wehavescience.utils.file.annotations.Field;
 import br.com.wehavescience.utils.file.annotations.Footer;
 import br.com.wehavescience.utils.file.annotations.Header;
 import br.com.wehavescience.utils.file.annotations.Lines;
-import br.com.wehavescience.utils.sample.CompleteModel;
-import br.com.wehavescience.utils.sample.ModelSample;
 
 /**
  * @author gabriel
  * 
- *         Oct 10, 2013
+ * Oct 10, 2013
  */
+@SuppressWarnings("unchecked")
 public class FileParser {
-	public static <T> T parse(String line, Class<T> objectType) {
+	public static <T> T asObject(String line, Class<T> objectType) {
 		try {
 			T instance = objectType.newInstance();
 
@@ -30,17 +29,19 @@ public class FileParser {
 				}
 
 				String f = "";
-				
-				if(annotation.padDirection() == Field.LEFT_PAD){
-					f = removeLeftPad(line.subSequence(
-						annotation.firstPosition() - 1,
-						annotation.lastPosition()).toString(), annotation.pad());
+
+				if (annotation.padDirection() == Field.LEFT_PAD) {
+					f = PadUtils.removeLeftPad(
+							line.subSequence(annotation.firstPosition() - 1,
+									annotation.lastPosition()).toString(),
+							annotation.pad());
 				}
-				
-				if(annotation.padDirection() == Field.RIGHT_PAD){
-					f = removeRightPad(line.subSequence(
-						annotation.firstPosition() - 1,
-						annotation.lastPosition()).toString(), annotation.pad());
+
+				if (annotation.padDirection() == Field.RIGHT_PAD) {
+					f = PadUtils.removeRightPad(
+							line.subSequence(annotation.firstPosition() - 1,
+									annotation.lastPosition()).toString(),
+							annotation.pad());
 				}
 				field.set(instance, f);
 			}
@@ -51,8 +52,7 @@ public class FileParser {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T, L, H, F> T parse(List<String> lines, Class<T> objectType) {
+	public static <T, L, H, F> T asObject(List<String> lines, Class<T> objectType) {
 		try {
 			T instance = objectType.newInstance();
 			for (java.lang.reflect.Field field : objectType.getDeclaredFields()) {
@@ -63,13 +63,13 @@ public class FileParser {
 				Footer footer = field.getAnnotation(Footer.class);
 
 				if (header != null) {
-					H h = (H) parse(lines.get(0),
+					H h = (H) asObject(lines.get(0),
 							Class.forName(field.getType().getName()));
 					field.set(instance, h);
 				}
 
 				if (footer != null) {
-					F f = (F) parse(lines.get(lines.size() - 1),
+					F f = (F) asObject(lines.get(lines.size() - 1),
 							Class.forName(field.getType().getName()));
 					field.set(instance, f);
 				}
@@ -89,7 +89,7 @@ public class FileParser {
 						if (i == 0) {
 							continue;
 						}
-						L line = (L) parse(lines.get(i), lineType);
+						L line = (L) asObject(lines.get(i), lineType);
 						lineList.add(line);
 					}
 					field.set(instance, lineList);
@@ -102,45 +102,11 @@ public class FileParser {
 		}
 		return null;
 	}
-	
-	private static String removeLeftPad(String str, String pad) {
-		while(str.startsWith(pad)){
-			str = str.replaceFirst(pad, "");
-		}
-		return str;
-	}
-	
-	private static String removeRightPad(String str, String pad) {
-		while(str.endsWith(pad)){
-			str = str.substring(0, str.lastIndexOf(pad));
-		}
-		return str;
-	}
 
-	private static String leftPad(String str, int size, String pad) {
-		StringBuilder builder = new StringBuilder();
-		addPad(str, size, pad, builder);
-		builder.append(str);
-		return builder.substring(0, size);
-	}
-
-	private static String rightPad(String str, int size, String pad) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(str);
-		addPad(str, size, pad, builder);
-		return builder.substring(0, size);
-	}
-
-	private static void addPad(String str, int size, String pad,
-			StringBuilder builder) {
-		for (int i = 0; i < size - str.length(); i++) {
-			builder.append(pad);
-		}
-	}
-
-	public static <T> String parse(T object, int lineSize) {
+	public static <T> String asString(T object, int lineSize) {
 		try {
-			StringBuilder builder = new StringBuilder(leftPad("", lineSize, " "));
+			StringBuilder builder = new StringBuilder(
+					PadUtils.leftPad("", lineSize, " "));
 
 			for (java.lang.reflect.Field field : object.getClass()
 					.getDeclaredFields()) {
@@ -151,14 +117,14 @@ public class FileParser {
 				if (annotation == null) {
 					continue;
 				}
-				
+
 				String f = "";
 
 				if (annotation.padDirection() == Field.LEFT_PAD) {
-					f = leftPad(field.get(object).toString(), field.get(object)
+					f = PadUtils.leftPad(field.get(object).toString(), field.get(object)
 							.toString().length(), annotation.pad());
 				} else if (annotation.padDirection() == Field.RIGHT_PAD) {
-					f = rightPad(field.get(object).toString(), field
+					f = PadUtils.rightPad(field.get(object).toString(), field
 							.get(object).toString().length(), annotation.pad());
 				}
 
@@ -172,21 +138,38 @@ public class FileParser {
 		return null;
 	}
 
-	public static void main(String[] args) {
-		long init = System.currentTimeMillis();
+	public static <T, L, H, F> List<String> asStringList(T object, int lineSize,
+			int headerSize, int footerSize) {
+		try {
+			List<String> list = new ArrayList<String>();
 
-		List<String> lines = new ArrayList<String>();
+			for (java.lang.reflect.Field field : object.getClass()
+					.getDeclaredFields()) {
+				field.setAccessible(true);
+				
+				Lines lines = field.getAnnotation(Lines.class);
+				Header header = field.getAnnotation(Header.class);
+				Footer footer = field.getAnnotation(Footer.class);
 
-		for (int i = 0; i < 30; i++) {
-			lines.add(ModelSample.LINE_SAMPLE);
+				if (header != null) {
+					list.add(0, asString(field.get(object), headerSize));
+					continue;
+				}
+				if (footer != null) {
+					list.add(asString(field.get(object), footerSize));
+					continue;
+				}
+				if (lines != null) {
+					for(L line : (List<L>)field.get(object)){
+						list.add(1, asString(line, lineSize));
+					}
+					continue;
+				}
+			}
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		long f = System.currentTimeMillis();
-		System.out.println(f - init);
-		CompleteModel c = parse(lines, CompleteModel.class);
-
-		String line = parse(c.getLines().get(0), 150);
-
-		System.out.println(line);
+		return null;
 	}
 }
