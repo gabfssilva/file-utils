@@ -7,8 +7,8 @@ import br.com.wehavescience.utils.file.annotations.Field;
  * 
  * Oct 10, 2013
  */
-public class Model {
-	public static final String LINE_SAMPLE = "THISISMYMODELOFMYEXAMPLE";
+public class ModelSample {
+	public static final String LINE_SAMPLE = "THISISMYMODELOFMYEXAMPLE                                                                                                       ";
 
 	@Field(firstPosition = 1, lastPosition = 4)
 	private String firstWord;
@@ -22,7 +22,7 @@ public class Model {
 	private String fifthWord;
 	@Field(firstPosition = 16, lastPosition = 17)
 	private String sixthWord;
-	@Field(firstPosition = 18, lastPosition = 24)
+	@Field(firstPosition = 18, lastPosition = 50)
 	private String seventhWord;
 
 	public String getFirstWord() {

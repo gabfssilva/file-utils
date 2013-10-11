@@ -12,12 +12,6 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Field {
-	static final int RIGHT_PAD = 1;
-	static final int LEFT_PAD = 0;
+public @interface Lines {
 
-	int firstPosition();
-	int lastPosition();
-	String pad() default " ";
-	int padDirection() default 1;
 }

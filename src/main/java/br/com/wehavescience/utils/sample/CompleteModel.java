@@ -2,10 +2,9 @@ package br.com.wehavescience.utils.sample;
 
 import java.util.List;
 
-import br.com.wehavescience.utils.file.annotations.Field;
-import br.com.wehavescience.utils.file.annotations.Fields;
 import br.com.wehavescience.utils.file.annotations.Footer;
 import br.com.wehavescience.utils.file.annotations.Header;
+import br.com.wehavescience.utils.file.annotations.Lines;
 
 /**
  * @author gabriel
@@ -17,8 +16,8 @@ public class CompleteModel {
 	private HeaderSample header;
 	@Footer
 	private FooterSample footer;
-	@Fields
-	private List<Model> lines;
+	@Lines
+	private List<ModelSample> lines;
 
 	public HeaderSample getHeader() {
 		return header;
@@ -36,11 +35,11 @@ public class CompleteModel {
 		this.footer = footer;
 	}
 
-	public List<Model> getLines() {
+	public List<ModelSample> getLines() {
 		return lines;
 	}
 
-	public void setLines(List<Model> lines) {
+	public void setLines(List<ModelSample> lines) {
 		this.lines = lines;
 	}
 }
