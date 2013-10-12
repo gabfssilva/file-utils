@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.wehavescience.utils.file.FileParser;
-import br.com.wehavescience.utils.sample.CompleteModel;
+import br.com.wehavescience.utils.sample.CompleteModelSample;
 import br.com.wehavescience.utils.sample.ModelSample;
 
 /**
@@ -22,23 +22,28 @@ public class FileUtilsMain {
 		 * First line = header
 		 * Last line = footer
 		 */
-		for(int i = 0;i<30;i++){
+		
+		file.add("MYHEADER");
+		
+		for(int i = 1;i<30;i++){
 			file.add(ModelSample.LINE_SAMPLE);
 		}
+		
+		file.add("MYFOOTER");
 		
 		/**
 		 * Converting the list to the object
 		 * 
 		 * This object contains: @Header, @Footer, @Lines
 		 */
-		CompleteModel model = FileParser.asObject(file, CompleteModel.class);
+		CompleteModelSample model = FileParser.asObject(file, CompleteModelSample.class);
 		
 		System.out.println(model.toString());
 		
 		/**
 		 * Converting again to List<String>
 		 */
-		List<String> lines = FileParser.asStringList(model, 150, 30, 30);
+		List<String> lines = FileParser.asStringList(model, 50, 30, 30);
 		
 		System.out.println(lines.toString());
 	}

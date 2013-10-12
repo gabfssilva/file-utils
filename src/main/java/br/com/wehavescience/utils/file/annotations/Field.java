@@ -15,9 +15,12 @@ import java.lang.annotation.Target;
 public @interface Field {
 	static final int RIGHT_PAD = 1;
 	static final int LEFT_PAD = 0;
+	
+	static final String WHITE_SPACE = " ";
+	static final String ZERO = "0";
 
 	int firstPosition();
 	int lastPosition();
-	String pad() default " ";
-	int padDirection() default 1;
+	String pad() default WHITE_SPACE;
+	int padDirection() default RIGHT_PAD;
 }

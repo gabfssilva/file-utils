@@ -1,5 +1,6 @@
 package br.com.wehavescience.utils.file;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,11 +8,12 @@ import br.com.wehavescience.utils.file.annotations.Field;
 import br.com.wehavescience.utils.file.annotations.Footer;
 import br.com.wehavescience.utils.file.annotations.Header;
 import br.com.wehavescience.utils.file.annotations.Lines;
+import br.com.wehavescience.utils.file.exception.InvalidTypeException;
 
 /**
  * @author gabriel
  * 
- * Oct 10, 2013
+ *         Oct 10, 2013
  */
 @SuppressWarnings("unchecked")
 public class FileParser {
@@ -52,7 +54,8 @@ public class FileParser {
 		return null;
 	}
 
-	public static <T, L, H, F> T asObject(List<String> lines, Class<T> objectType) {
+	public static <T, L, H, F> T asObject(List<String> lines,
+			Class<T> objectType) {
 		try {
 			T instance = objectType.newInstance();
 			for (java.lang.reflect.Field field : objectType.getDeclaredFields()) {
@@ -74,15 +77,19 @@ public class FileParser {
 					field.set(instance, f);
 				}
 
-				if (fields != null) {
+				/**
+				 * The @Lines is always a list, and, a list have a type, so, we
+				 * need to specify this type to the string converter
+				 */
 
+				if (fields != null) {
 					/**
-					 * MAGIC
+					 * If it isn't a list...
 					 */
-					String lineClassName = field.toGenericString()
-							.replaceAll("\\D*<", "")
-							.replaceAll(">\\D*", "");
-					Class<L> lineType = (Class<L>) Class.forName(lineClassName);
+					ParameterizedType type = validateListType(field);
+
+					Class<L> lineType = (Class<L>) type
+							.getActualTypeArguments()[0];
 					List<L> lineList = new ArrayList<L>();
 
 					for (int i = 0; i < lines.size() - 1; i++) {
@@ -103,10 +110,26 @@ public class FileParser {
 		return null;
 	}
 
+	private static ParameterizedType validateListType(
+			java.lang.reflect.Field field) {
+		try {
+			ParameterizedType type = (ParameterizedType) field.getGenericType();
+
+			if (!type.getRawType().equals(List.class)) {
+				throw new InvalidTypeException(
+						"You can use @Lines only on List objects");
+			}
+			return type;
+		} catch (Exception e) {
+			throw new InvalidTypeException(
+					"You can use @Lines only on List objects");
+		}
+	}
+
 	public static <T> String asString(T object, int lineSize) {
 		try {
-			StringBuilder builder = new StringBuilder(
-					PadUtils.leftPad("", lineSize, " "));
+			StringBuilder builder = new StringBuilder(PadUtils.leftPad("",
+					lineSize, " "));
 
 			for (java.lang.reflect.Field field : object.getClass()
 					.getDeclaredFields()) {
@@ -120,12 +143,12 @@ public class FileParser {
 
 				String f = "";
 
+				int fieldSize = annotation.lastPosition() - annotation.firstPosition() + 1;
+				
 				if (annotation.padDirection() == Field.LEFT_PAD) {
-					f = PadUtils.leftPad(field.get(object).toString(), field.get(object)
-							.toString().length(), annotation.pad());
+					f = PadUtils.leftPad(field.get(object).toString(), fieldSize, annotation.pad());
 				} else if (annotation.padDirection() == Field.RIGHT_PAD) {
-					f = PadUtils.rightPad(field.get(object).toString(), field
-							.get(object).toString().length(), annotation.pad());
+					f = PadUtils.rightPad(field.get(object).toString(), fieldSize, annotation.pad());
 				}
 
 				builder.replace(annotation.firstPosition() - 1,
@@ -138,21 +161,24 @@ public class FileParser {
 		return null;
 	}
 
-	public static <T, L, H, F> List<String> asStringList(T object, int lineSize,
-			int headerSize, int footerSize) {
+	public static <T, L, H, F> List<String> asStringList(T object,
+			int lineSize, int headerSize, int footerSize) {
 		try {
 			List<String> list = new ArrayList<String>();
 
+			boolean hasHeader = false;
+			
 			for (java.lang.reflect.Field field : object.getClass()
 					.getDeclaredFields()) {
 				field.setAccessible(true);
-				
+
 				Lines lines = field.getAnnotation(Lines.class);
 				Header header = field.getAnnotation(Header.class);
 				Footer footer = field.getAnnotation(Footer.class);
 
 				if (header != null) {
 					list.add(0, asString(field.get(object), headerSize));
+					hasHeader = true;
 					continue;
 				}
 				if (footer != null) {
@@ -160,8 +186,12 @@ public class FileParser {
 					continue;
 				}
 				if (lines != null) {
-					for(L line : (List<L>)field.get(object)){
-						list.add(1, asString(line, lineSize));
+					validateListType(field);
+					
+					int index = hasHeader ? 1 : 0;
+					
+					for (L line : (List<L>) field.get(object)) {
+						list.add(index, asString(line, lineSize));
 					}
 					continue;
 				}

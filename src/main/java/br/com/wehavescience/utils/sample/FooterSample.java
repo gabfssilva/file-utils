@@ -8,9 +8,9 @@ import br.com.wehavescience.utils.file.annotations.Field;
  * Oct 10, 2013
  */
 public class FooterSample {
-	@Field(firstPosition = 1, lastPosition = 5)
+	@Field(firstPosition = 1, lastPosition = 2)
 	private String field1;
-	@Field(firstPosition = 6, lastPosition = 10)
+	@Field(firstPosition = 3, lastPosition = 8)
 	private String field2;
 	
 	public String getField1() {

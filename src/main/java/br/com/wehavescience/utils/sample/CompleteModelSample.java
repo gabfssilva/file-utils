@@ -11,7 +11,7 @@ import br.com.wehavescience.utils.file.annotations.Lines;
  * 
  * Oct 10, 2013
  */
-public class CompleteModel {
+public class CompleteModelSample {
 	@Header
 	private HeaderSample header;
 	@Footer
