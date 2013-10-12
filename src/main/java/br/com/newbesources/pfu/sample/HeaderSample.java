@@ -1,6 +1,6 @@
-package br.com.wehavescience.utils.sample;
+package br.com.newbesources.pfu.sample;
 
-import br.com.wehavescience.utils.file.annotations.Field;
+import br.com.newbesources.pfu.core.annotations.Field;
 
 /**
  * @author gabriel

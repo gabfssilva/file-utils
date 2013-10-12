@@ -1,4 +1,4 @@
-package br.com.wehavescience.utils.file;
+package br.com.newbesources.pfu.core.utils;
 
 /**
  * @author gabriel

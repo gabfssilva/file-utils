@@ -1,10 +1,11 @@
-package br.com.wehavescience.utils.sample;
+package br.com.newbesources.pfu.sample;
 
 import java.util.List;
 
-import br.com.wehavescience.utils.file.annotations.Footer;
-import br.com.wehavescience.utils.file.annotations.Header;
-import br.com.wehavescience.utils.file.annotations.Lines;
+import br.com.newbesources.pfu.core.annotations.Footer;
+import br.com.newbesources.pfu.core.annotations.Header;
+import br.com.newbesources.pfu.core.annotations.Lines;
+
 
 /**
  * @author gabriel

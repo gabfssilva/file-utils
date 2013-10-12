@@ -1,14 +1,15 @@
-package br.com.wehavescience.utils.file;
+package br.com.newbesources.pfu.core;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.wehavescience.utils.file.annotations.Field;
-import br.com.wehavescience.utils.file.annotations.Footer;
-import br.com.wehavescience.utils.file.annotations.Header;
-import br.com.wehavescience.utils.file.annotations.Lines;
-import br.com.wehavescience.utils.file.exception.InvalidTypeException;
+import br.com.newbesources.pfu.core.annotations.Field;
+import br.com.newbesources.pfu.core.annotations.Footer;
+import br.com.newbesources.pfu.core.annotations.Header;
+import br.com.newbesources.pfu.core.annotations.Lines;
+import br.com.newbesources.pfu.core.exception.InvalidTypeException;
+import br.com.newbesources.pfu.core.utils.PadUtils;
 
 /**
  * @author gabriel

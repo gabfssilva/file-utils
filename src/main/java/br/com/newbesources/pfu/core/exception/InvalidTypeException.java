@@ -1,4 +1,4 @@
-package br.com.wehavescience.utils.file.exception;
+package br.com.newbesources.pfu.core.exception;
 
 /**
  * @author gabriel

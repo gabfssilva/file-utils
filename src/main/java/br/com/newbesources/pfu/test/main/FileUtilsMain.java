@@ -1,11 +1,11 @@
-package br.com.wehavescience.utils.test.main;
+package br.com.newbesources.pfu.test.main;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.wehavescience.utils.file.FileParser;
-import br.com.wehavescience.utils.sample.CompleteModelSample;
-import br.com.wehavescience.utils.sample.ModelSample;
+import br.com.newbesources.pfu.core.FileParser;
+import br.com.newbesources.pfu.sample.CompleteModelSample;
+import br.com.newbesources.pfu.sample.ModelSample;
 
 /**
  * @author gabriel

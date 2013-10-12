@@ -1,4 +1,4 @@
-package br.com.wehavescience.utils.file.annotations;
+package br.com.newbesources.pfu.core.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
